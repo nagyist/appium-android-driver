@@ -1,3 +1,9 @@
+## [14.0.3](https://github.com/appium/appium-android-driver/compare/v14.0.2...v14.0.3) (2026-07-27)
+
+### Miscellaneous Chores
+
+* Integrate oxc and release configs ([#1091](https://github.com/appium/appium-android-driver/issues/1091)) ([d970c2f](https://github.com/appium/appium-android-driver/commit/d970c2f70f7e8f764d0965944bee57f6e130e11c))
+
 ## [14.0.2](https://github.com/appium/appium-android-driver/compare/v14.0.1...v14.0.2) (2026-07-23)
 
 ### Miscellaneous Chores

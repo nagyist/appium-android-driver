@@ -1,3 +1,9 @@
+## [14.0.4](https://github.com/appium/appium-android-driver/compare/v14.0.3...v14.0.4) (2026-07-28)
+
+### Miscellaneous Chores
+
+* Drop chai ([#1092](https://github.com/appium/appium-android-driver/issues/1092)) ([8f78f35](https://github.com/appium/appium-android-driver/commit/8f78f35cda34882903bdfa8d3194debf37f51fd1))
+
 ## [14.0.3](https://github.com/appium/appium-android-driver/compare/v14.0.2...v14.0.3) (2026-07-27)
 
 ### Miscellaneous Chores

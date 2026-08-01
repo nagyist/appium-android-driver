@@ -1,3 +1,9 @@
+## [14.0.5](https://github.com/appium/appium-android-driver/compare/v14.0.4...v14.0.5) (2026-08-01)
+
+### Miscellaneous Chores
+
+* Drop esmock ([#1093](https://github.com/appium/appium-android-driver/issues/1093)) ([2051564](https://github.com/appium/appium-android-driver/commit/2051564d38106ef56aca710b1d5d03e46bebf26c))
+
 ## [14.0.4](https://github.com/appium/appium-android-driver/compare/v14.0.3...v14.0.4) (2026-07-28)
 
 ### Miscellaneous Chores

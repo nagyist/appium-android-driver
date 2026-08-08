@@ -9,9 +9,14 @@ import type {Locale} from './types.js';
  *
  * @param language The language code to retrieve strings for. If not provided,
  * the device's current language will be used.
+ * @param stringFile path to APK to extract string resources from
  * @returns Promise that resolves to a mapping of string keys to their localized values.
  */
-export async function getStrings(this: AndroidDriver, language: string | null = null): Promise<StringRecord> {
+export async function getStrings(
+  this: AndroidDriver,
+  language: string | null = null,
+  stringFile: string | null = null,
+): Promise<StringRecord> {
   if (!language) {
     language = await this.adb.getDeviceLanguage();
     this.log.info(`No language specified, returning strings for: ${language}`);
@@ -27,7 +32,9 @@ export async function getStrings(this: AndroidDriver, language: string | null = 
     return result;
   };
 
-  return preprocessStringsMap(await extractStringsFromResources.bind(this)(language));
+  const options: AndroidDriverOpts = stringFile ? {...this.opts, app: stringFile} : this.opts;
+
+  return preprocessStringsMap(await extractStringsFromResources(this, language, options));
 }
 
 /**
@@ -56,7 +63,7 @@ export async function ensureDeviceLocale(
     let errMsg = `Cannot set the device locale to '${toLocaleAbbr({language, country, script})}'.`;
     let suggestions: string[] = [];
     try {
-      suggestions = (await fetchLocaleSuggestions.bind(this)(language, country)).map(toLocaleAbbr);
+      suggestions = (await fetchLocaleSuggestions(this, language, country)).map(toLocaleAbbr);
     } catch (e1) {
       this.log.debug((e1 as Error).stack);
     }
@@ -70,11 +77,11 @@ export async function ensureDeviceLocale(
 // #region Internal helpers
 
 async function extractStringsFromResources(
-  this: AndroidDriver,
+  driver: AndroidDriver,
   language: string | null,
   opts: AndroidDriverOpts | null = null,
 ): Promise<StringRecord> {
-  const caps = opts ?? this.opts;
+  const caps = opts ?? driver.opts;
 
   let app: string | undefined = caps.app;
   let tmpRoot: string | undefined;
@@ -82,7 +89,7 @@ async function extractStringsFromResources(
     if (!app && caps.appPackage) {
       tmpRoot = await tempDir.openDir();
       try {
-        app = await this.adb.pullApk(caps.appPackage, tmpRoot);
+        app = await driver.adb.pullApk(caps.appPackage, tmpRoot);
       } catch (e) {
         throw new Error(
           `Could not extract app strings, failed to pull an apk from '${caps.appPackage}'. Original error: ${(e as Error).message}`,
@@ -95,7 +102,7 @@ async function extractStringsFromResources(
       throw new Error(`Could not extract app strings, no app or package specified`);
     }
 
-    return (await this.adb.extractStringsFromApk(app, language ?? null)).apkStrings;
+    return (await driver.adb.extractStringsFromApk(app, language ?? null)).apkStrings;
   } finally {
     if (tmpRoot) {
       await fs.rimraf(tmpRoot);
@@ -103,8 +110,8 @@ async function extractStringsFromResources(
   }
 }
 
-async function fetchLocaleSuggestions(this: AndroidDriver, language?: string, country?: string): Promise<Locale[]> {
-  const supportedLocales = await this.settingsApp.listSupportedLocales();
+async function fetchLocaleSuggestions(driver: AndroidDriver, language?: string, country?: string): Promise<Locale[]> {
+  const supportedLocales = await driver.settingsApp.listSupportedLocales();
   const suggestedLocales = supportedLocales.filter(
     (locale) =>
       language?.toLowerCase() === locale.language?.toLowerCase() ||

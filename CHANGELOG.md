@@ -1,3 +1,9 @@
+## [14.0.6](https://github.com/appium/appium-android-driver/compare/v14.0.5...v14.0.6) (2026-08-08)
+
+### Bug Fixes
+
+* add missing 'stringFile' parameter to 'mobile: getAppStrings' ([#1094](https://github.com/appium/appium-android-driver/issues/1094)) ([b9a8917](https://github.com/appium/appium-android-driver/commit/b9a891766d9343693f96cdf600b026191d20f332))
+
 ## [14.0.5](https://github.com/appium/appium-android-driver/compare/v14.0.4...v14.0.5) (2026-08-01)
 
 ### Miscellaneous Chores
